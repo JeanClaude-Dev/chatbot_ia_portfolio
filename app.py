@@ -166,7 +166,7 @@ if "messages" not in st.session_state:
 col1, col2 = st.columns([8,1])
 
 with col2:
-    if st.button("🗑️ Limpar conversa"):
+    if st.button("🗑️ Limpar"):
         st.session_state.messages = []
         st.rerun()
 
