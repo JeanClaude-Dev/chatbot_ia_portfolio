@@ -73,39 +73,6 @@ def banner_to_base64(img):
     return base64.b64encode(buffered.getvalue()).decode()
 
 # ---------- TITULO ----------
-banner = Image.open("banner.png")
-
-st.markdown("""
-<style>
-
-.banner-container{
-position:relative;
-width:100%;
-height:220px;
-overflow:hidden;
-border-radius:12px;
-}
-
-.banner-container img{
-width:100%;
-height:220px;
-object-fit:cover;
-}
-
-.banner-text{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%, -50%);
-font-size:48px;
-font-weight:900;
-color:white;
-letter-spacing:2px;
-text-shadow:0px 0px 20px rgba(0,0,0,0.8);
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 banner = Image.open("banner.png")
 
