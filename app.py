@@ -3,9 +3,12 @@ from groq import Groq
 from PIL import Image
 import time
 
+import base64
+from io import BytesIO
+
 # CONFIGURAÇÃO
 st.set_page_config(
-    page_title="OPEERA AI",
+    page_title="ClaudeMind",
     page_icon="🤖",
     layout="wide"
 )
@@ -66,13 +69,88 @@ border-radius:8px !important;
 banner = Image.open("banner.png")
 st.image(banner, use_container_width=True)
 
-# ---------- TITULO ----------
-st.markdown('<div class="main-title">OPEERA AI</div>', unsafe_allow_html=True)
 
-st.markdown(
-'<div class="subtitle">Plataforma de inteligência artificial para perguntas e respostas</div>',
-unsafe_allow_html=True
-)
+def banner_to_base64(img):
+    buffered = BytesIO()
+    img.save(buffered, format="PNG")
+    return base64.b64encode(buffered.getvalue()).decode()
+
+# ---------- TITULO ----------
+banner = Image.open("banner.png")
+
+st.markdown("""
+<style>
+
+.banner-container{
+position:relative;
+width:100%;
+height:220px;
+overflow:hidden;
+border-radius:12px;
+}
+
+.banner-container img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+.banner-text{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+font-size:48px;
+font-weight:900;
+color:white;
+letter-spacing:2px;
+text-shadow:0px 0px 20px rgba(0,0,0,0.8);
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+banner = Image.open("banner.png")
+
+st.markdown("""
+<style>
+
+.banner-container{
+position:relative;
+width:100%;
+height:220px;
+overflow:hidden;
+border-radius:12px;
+}
+
+.banner-container img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+.banner-text{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+font-size:48px;
+font-weight:900;
+color:white;
+letter-spacing:2px;
+text-shadow:0px 0px 20px rgba(0,0,0,0.8);
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown(f"""
+<div class="banner-container">
+<img src="data:image/png;base64,{banner_to_base64(banner)}">
+<div class="banner-text">ClaudeMind</div>
+</div>
+""", unsafe_allow_html=True)
+
 
 st.divider()
 
@@ -88,11 +166,11 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # ---------- BOTÃO LIMPAR ----------
-col1,col2,col3 = st.columns([1,1,1])
+col1, col2 = st.columns([8,1])
 
 with col2:
     if st.button("🗑️ Limpar conversa"):
-        st.session_state.messages=[]
+        st.session_state.messages = []
         st.rerun()
 
 # ---------- CHAT ----------
