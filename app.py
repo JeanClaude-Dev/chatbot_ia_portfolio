@@ -66,9 +66,6 @@ border-radius:8px !important;
 """, unsafe_allow_html=True)
 
 # ---------- BANNER ----------
-banner = Image.open("banner.png")
-st.image(banner, use_container_width=True)
-
 
 def banner_to_base64(img):
     buffered = BytesIO()
