@@ -1,7 +1,7 @@
 # ClaudeMind AI – Intelligent Chatbot
 
 
-ClaudeMind AI é um **chatbot inteligente** desenvolvido em Python com **Streamlit**, utilizando a **API da Groq** e o modelo **Llama 3.3 70B**. O projeto demonstra como criar uma **interface moderna de assistente de IA** capaz de responder perguntas gerais com **alta performance e baixa latência**.
+ClaudeMind AI é um **chatbot inteligente** desenvolvido em Python com **Streamlit**, utilizando a **API da Groq**. O modelo pode ser definido nos secrets do Streamlit.
 
 ---
 
@@ -25,4 +25,15 @@ ClaudeMind AI é um **chatbot inteligente** desenvolvido em Python com **Streaml
 - **Pillow** – manipulação de imagens (banner)  
 
 ---
+
+## Configuração
+
+Configure os secrets do Streamlit:
+
+```toml
+GROQ_API_KEY = "sua-chave-da-groq"
+GROQ_MODEL = "llama-3.3-70b-versatile"
+```
+
+Se `GROQ_MODEL` não for definido, o app usa `llama-3.1-8b-instant`, que é o padrão compatível com a configuração anterior.
 

@@ -125,6 +125,8 @@ except Exception:
     st.error("Configure a chave GROQ_API_KEY no secrets.")
     st.stop()
 
+modelo = st.secrets.get("GROQ_MODEL", "llama-3.1-8b-instant")
+
 # ---------- HISTÓRICO ----------
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -174,7 +176,7 @@ if prompt := st.chat_input("Digite qualquer pergunta..."):
 
                 resposta = client.chat.completions.create(
                     messages=mensagens,
-                    model="llama-3.3-70b-versatile",
+                    model=modelo,
                     temperature=0.7
                 )
 
