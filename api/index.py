@@ -12,9 +12,7 @@ SYSTEM_PROMPT = (
     "Voce e um assistente de inteligencia artificial avancado que responde "
     "perguntas de forma clara e util."
 )
-OPENROUTER_MODEL = os.environ.get(
-    "OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct:free"
-)
+OPENROUTER_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 
 
 @app.get("/")
@@ -44,9 +42,12 @@ def chat(path=None):
         return jsonify({"error": "Nao foi encontrada uma mensagem valida."}), 400
 
     try:
-        api_key = os.environ.get("OPENROUTER_API_KEY")
+        api_key = os.environ.get("OPENROUTER_API_KEY", "").strip()
         if not api_key:
-            raise RuntimeError("A variavel OPENROUTER_API_KEY nao foi configurada na Vercel.")
+            raise RuntimeError(
+                "Cadastre OPENROUTER_API_KEY em Settings > Environment Variables na Vercel "
+                "e faca um novo Redeploy."
+            )
 
         api_url = "https://openrouter.ai/api/v1/chat/completions"
         body = json.dumps(
