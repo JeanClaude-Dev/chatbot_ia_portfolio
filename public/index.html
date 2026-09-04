@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ClaudeMind, seu assistente de inteligencia artificial.">
+  <title>ClaudeMind | Assistente IA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">C</span><span>ClaudeMind</span></div>
+      <button id="clear-button" class="clear-button" type="button" title="Limpar conversa" aria-label="Limpar conversa">&#8635; <span>Limpar</span></button>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">ASSISTENTE PESSOAL <span></span> GROQ AI</p>
+      <h1 id="page-title">Ideias claras.<br><em>Respostas melhores.</em></h1>
+      <p class="hero-copy">Converse com uma inteligencia artificial pronta para ajudar a pensar, criar e resolver.</p>
+    </section>
+
+    <section class="chat-panel" aria-label="Conversa com ClaudeMind">
+      <div id="messages" class="messages" aria-live="polite">
+        <div class="welcome-message">
+          <div class="avatar assistant-avatar">C</div>
+          <div><strong>ClaudeMind</strong><p>Ola! Como posso ajudar voce hoje?</p></div>
+        </div>
+      </div>
+      <form id="chat-form" class="composer">
+        <textarea id="prompt" rows="1" placeholder="Digite sua pergunta..." aria-label="Sua pergunta" required></textarea>
+        <button id="send-button" type="submit" title="Enviar mensagem" aria-label="Enviar mensagem">&#8593;</button>
+      </form>
+      <p class="privacy-note">Suas mensagens sao processadas com seguranca pela API da Groq.</p>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

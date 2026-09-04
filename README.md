@@ -1,39 +1,33 @@
-# ClaudeMind AI – Intelligent Chatbot
+# ClaudeMind AI
 
+Chatbot web com frontend estatico e API serverless em Python. A resposta e gerada pela API da Groq.
 
-ClaudeMind AI é um **chatbot inteligente** desenvolvido em Python com **Streamlit**, utilizando a **API da Groq**. O modelo pode ser definido nos secrets do Streamlit.
+## Deploy na Vercel
 
----
+1. Suba este repositorio no GitHub e importe-o em [vercel.com](https://vercel.com).
+2. Em **Settings > Environment Variables**, adicione:
 
-## 🌟 Funcionalidades
+   - `GROQ_API_KEY`: sua chave secreta da Groq.
+   - `GROQ_MODEL`: opcional. Padrao: `llama-3.1-8b-instant`.
 
-- Interface moderna e futurista em **modo dark**  
-- Chat com respostas da IA em **tempo real** (efeito digitação)  
-- Histórico de conversa durante a sessão  
-- Botão para **limpar conversa**  
-- Nome e branding integrados ao banner (**ClaudeMind**)  
-- Fácil deploy em **Streamlit Cloud ou outras plataformas**  
+3. Faca o deploy. O arquivo `vercel.json` direciona `/api/chat` para a funcao Python.
 
----
+O plano gratuito da Vercel e suficiente para um projeto pessoal, mas a funcao possui limites de execucao e uso. A API da Groq tambem tem limites proprios, que podem mudar conforme a conta e o modelo.
 
-## 🛠️ Tecnologias Utilizadas
+## Desenvolvimento local
 
-- **Python 3.11+**  
-- **[Streamlit](https://streamlit.io/)** – framework web para aplicações interativas  
-- **[Groq API](https://www.groq.com/)** – plataforma de inferência de IA  
-- **Llama 3.3 70B** – modelo de linguagem avançado  
-- **Pillow** – manipulação de imagens (banner)  
-
----
-
-## Configuração
-
-Configure os secrets do Streamlit:
-
-```toml
-GROQ_API_KEY = "sua-chave-da-groq"
-GROQ_MODEL = "llama-3.3-70b-versatile"
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+$env:GROQ_API_KEY="sua-chave-da-groq"
+python api/index.py
 ```
 
-Se `GROQ_MODEL` não for definido, o app usa `llama-3.1-8b-instant`, que é o padrão compatível com a configuração anterior.
+Abra `http://localhost:3000` no navegador.
 
+## Estrutura
+
+- `public/`: interface do chat, sem segredo no navegador.
+- `api/index.py`: endpoint serverless que chama a Groq.
+- `vercel.json`: configuracao de build e rotas.
