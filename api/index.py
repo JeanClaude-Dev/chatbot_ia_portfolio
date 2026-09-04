@@ -1,7 +1,9 @@
+import json
 import os
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from flask import Flask, jsonify, request, send_from_directory
-from groq import Groq
 
 PUBLIC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "public"))
 app = Flask(__name__, static_folder=None)
@@ -10,14 +12,9 @@ SYSTEM_PROMPT = (
     "Voce e um assistente de inteligencia artificial avancado que responde "
     "perguntas de forma clara e util."
 )
-GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.1-8b-instant")
-
-
-def get_client():
-    api_key = os.environ.get("GROQ_API_KEY")
-    if not api_key:
-        raise RuntimeError("A variavel GROQ_API_KEY nao foi configurada.")
-    return Groq(api_key=api_key)
+OPENROUTER_MODEL = os.environ.get(
+    "OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct:free"
+)
 
 
 @app.get("/")
@@ -47,15 +44,40 @@ def chat(path=None):
         return jsonify({"error": "Nao foi encontrada uma mensagem valida."}), 400
 
     try:
-        response = get_client().chat.completions.create(
-            messages=[{"role": "system", "content": SYSTEM_PROMPT}] + clean_messages,
-            model=GROQ_MODEL,
-            temperature=0.7,
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        if not api_key:
+            raise RuntimeError("A variavel OPENROUTER_API_KEY nao foi configurada na Vercel.")
+
+        api_url = "https://openrouter.ai/api/v1/chat/completions"
+        body = json.dumps(
+            {
+                "model": OPENROUTER_MODEL,
+                "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + clean_messages,
+                "temperature": 0.7,
+            }
+        ).encode("utf-8")
+        response_request = Request(
+            api_url,
+            data=body,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://chatbot-ia-portfolio-nine.vercel.app",
+                "X-Title": "ClaudeMind AI",
+            },
+            method="POST",
         )
-        text = response.choices[0].message.content or "Nao consegui gerar uma resposta."
+        with urlopen(response_request, timeout=30) as response:
+            response_data = json.loads(response.read().decode("utf-8"))
+        text = response_data["choices"][0]["message"]["content"]
         return jsonify({"message": text})
+    except HTTPError as error:
+        details = error.read().decode("utf-8")
+        return jsonify({"error": f"Erro ao consultar o OpenRouter: {details}"}), 502
+    except URLError as error:
+        return jsonify({"error": f"Nao foi possivel conectar ao OpenRouter: {error.reason}"}), 502
     except Exception as error:
-        return jsonify({"error": f"Erro ao consultar a IA: {error}"}), 502
+        return jsonify({"error": f"Erro ao consultar o OpenRouter: {error}"}), 502
 
 
 @app.get("/<path:path>")
