@@ -1,7 +1,6 @@
 import json
-import os
 import http.client
-from urllib.error import HTTPError, URLError
+import os
 
 from flask import Flask, jsonify, request, send_from_directory
 
@@ -24,7 +23,7 @@ def home():
 def health():
     api_key = (os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_KEY") or "").strip()
     return jsonify({
-        "version": "8e0e0dd",
+        "version": "1983428",
         "provider": "openrouter",
         "model": OPENROUTER_MODEL,
         "key_configured": bool(api_key),
