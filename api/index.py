@@ -64,5 +64,12 @@ def static_files(path):
     return send_from_directory(PUBLIC_DIR, "index.html")
 
 
+@app.errorhandler(404)
+def handle_not_found(error):
+    if request.method == "GET":
+        return send_from_directory(PUBLIC_DIR, "index.html")
+    return jsonify({"error": "Rota nao encontrada."}), 404
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 3000)))
