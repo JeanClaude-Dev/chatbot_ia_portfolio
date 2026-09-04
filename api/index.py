@@ -25,7 +25,8 @@ def home():
 
 
 @app.post("/api/chat")
-def chat():
+@app.post("/<path:path>")
+def chat(path=None):
     payload = request.get_json(silent=True) or {}
     messages = payload.get("messages")
 

@@ -12,6 +12,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; min-height: 100vh; color: var(--ink); background: radial-gradient(circle at 10% 0%, #e2f0df 0, transparent 33%), var(--paper); font-family: "DM Sans", sans-serif; }
 .app-shell { width: min(100% - 40px, 1080px); margin: auto; padding: 28px 0 70px; }
+.banner-image { display: block; width: 100%; height: 220px; margin-bottom: 25px; border-radius: 16px; object-fit: cover; box-shadow: var(--shadow); }
 .topbar { display: flex; align-items: center; justify-content: space-between; }
 .brand { display: flex; align-items: center; gap: 10px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 19px; }
 .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; color: white; background: var(--green); }
@@ -36,4 +37,4 @@ textarea::placeholder { color: #9aa8a1; }
 #send-button { display: grid; place-items: center; width: 42px; height: 42px; flex: 0 0 42px; border: 0; border-radius: 12px; color: white; background: var(--green); font-size: 23px; cursor: pointer; }
 #send-button:disabled { opacity: .5; cursor: wait; }
 .privacy-note { margin: 0; padding: 0 20px 17px; color: #a0aaa5; font-size: 11px; text-align: right; }
-@media (max-width: 600px) { .app-shell { width: min(100% - 28px, 1080px); padding-top: 18px; } .hero { padding: 65px 0 35px; } h1 { letter-spacing: -1px; } .messages { min-height: 340px; padding: 22px 18px; } .clear-button span { display: none; } }
+@media (max-width: 600px) { .app-shell { width: min(100% - 28px, 1080px); padding-top: 18px; } .banner-image { height: 145px; margin-bottom: 20px; } .hero { padding: 65px 0 35px; } h1 { letter-spacing: -1px; } .messages { min-height: 340px; padding: 22px 18px; } .clear-button span { display: none; } }

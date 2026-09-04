@@ -41,6 +41,8 @@ form.addEventListener('submit', async (event) => {
   sendButton.disabled = true;
   try {
     const response = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages }) });
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) throw new Error('A API retornou uma resposta invalida. Verifique o deploy da Vercel.');
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || 'Nao foi possivel obter uma resposta.');
     messages.push({ role: 'assistant', content: data.message });
