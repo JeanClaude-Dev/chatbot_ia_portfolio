@@ -1,7 +1,7 @@
 import json
 import os
+import http.client
 from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
 
 from flask import Flask, jsonify, request, send_from_directory
 
@@ -18,6 +18,17 @@ OPENROUTER_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 @app.get("/")
 def home():
     return send_from_directory(PUBLIC_DIR, "index.html")
+
+
+@app.get("/api/health")
+def health():
+    api_key = (os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_KEY") or "").strip()
+    return jsonify({
+        "version": "8e0e0dd",
+        "provider": "openrouter",
+        "model": OPENROUTER_MODEL,
+        "key_configured": bool(api_key),
+    })
 
 
 @app.post("/api/chat")
@@ -53,7 +64,6 @@ def chat(path=None):
                 "e faca um novo Redeploy."
             )
 
-        api_url = "https://openrouter.ai/api/v1/chat/completions"
         body = json.dumps(
             {
                 "model": OPENROUTER_MODEL,
@@ -61,22 +71,24 @@ def chat(path=None):
                 "temperature": 0.7,
             }
         ).encode("utf-8")
-        response_request = Request(api_url, data=body, method="POST")
-        response_request.add_header("Authorization", f"Bearer {api_key}")
-        response_request.add_header("Content-Type", "application/json")
-        response_request.add_header(
-            "HTTP-Referer", "https://chatbot-ia-portfolio-nine.vercel.app"
+        connection = http.client.HTTPSConnection("openrouter.ai", timeout=30)
+        connection.request(
+            "POST",
+            "/api/v1/chat/completions",
+            body=body,
+            headers={
+                "Authorization": "Bearer " + api_key,
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://chatbot-ia-portfolio-nine.vercel.app",
+                "X-Title": "ClaudeMind AI",
+            },
         )
-        response_request.add_header("X-Title", "ClaudeMind AI")
-        with urlopen(response_request, timeout=30) as response:
-            response_data = json.loads(response.read().decode("utf-8"))
+        response = connection.getresponse()
+        response_data = json.loads(response.read().decode("utf-8"))
+        if response.status >= 400:
+            raise RuntimeError(json.dumps(response_data))
         text = response_data["choices"][0]["message"]["content"]
         return jsonify({"message": text})
-    except HTTPError as error:
-        details = error.read().decode("utf-8")
-        return jsonify({"error": f"Erro ao consultar o OpenRouter: {details}"}), 502
-    except URLError as error:
-        return jsonify({"error": f"Nao foi possivel conectar ao OpenRouter: {error.reason}"}), 502
     except Exception as error:
         return jsonify({"error": f"Erro ao consultar o OpenRouter: {error}"}), 502
 
