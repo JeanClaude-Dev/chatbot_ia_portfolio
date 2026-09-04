@@ -48,7 +48,7 @@ def chat(path=None):
     try:
         response = get_client().chat.completions.create(
             messages=[{"role": "system", "content": SYSTEM_PROMPT}] + clean_messages,
-            model=os.environ.get("GROQ_MODEL", "llama-3.1-8b-instant"),
+            model="llama-3.3-70b-versatile",
             temperature=0.7,
         )
         text = response.choices[0].message.content or "Nao consegui gerar uma resposta."
