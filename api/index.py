@@ -3,7 +3,8 @@ import os
 from flask import Flask, jsonify, request, send_from_directory
 from groq import Groq
 
-app = Flask(__name__, static_folder="../public", static_url_path="")
+PUBLIC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "public"))
+app = Flask(__name__, static_folder=None)
 
 SYSTEM_PROMPT = (
     "Voce e um assistente de inteligencia artificial avancado que responde "
@@ -20,7 +21,7 @@ def get_client():
 
 @app.get("/")
 def home():
-    return send_from_directory(app.static_folder, "index.html")
+    return send_from_directory(PUBLIC_DIR, "index.html")
 
 
 @app.post("/api/chat")
@@ -53,6 +54,14 @@ def chat():
         return jsonify({"message": text})
     except Exception as error:
         return jsonify({"error": f"Erro ao consultar a IA: {error}"}), 502
+
+
+@app.get("/<path:path>")
+def static_files(path):
+    requested_file = os.path.join(PUBLIC_DIR, path)
+    if os.path.isfile(requested_file):
+        return send_from_directory(PUBLIC_DIR, path)
+    return send_from_directory(PUBLIC_DIR, "index.html")
 
 
 if __name__ == "__main__":
