@@ -42,7 +42,11 @@ def chat(path=None):
         return jsonify({"error": "Nao foi encontrada uma mensagem valida."}), 400
 
     try:
-        api_key = os.environ.get("OPENROUTER_API_KEY", "").strip()
+        api_key = (
+            os.environ.get("OPENROUTER_API_KEY")
+            or os.environ.get("OPENROUTER_KEY")
+            or ""
+        ).strip().strip('"\'')
         if not api_key:
             raise RuntimeError(
                 "Cadastre OPENROUTER_API_KEY em Settings > Environment Variables na Vercel "
@@ -57,17 +61,13 @@ def chat(path=None):
                 "temperature": 0.7,
             }
         ).encode("utf-8")
-        response_request = Request(
-            api_url,
-            data=body,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-                "HTTP-Referer": "https://chatbot-ia-portfolio-nine.vercel.app",
-                "X-Title": "ClaudeMind AI",
-            },
-            method="POST",
+        response_request = Request(api_url, data=body, method="POST")
+        response_request.add_header("Authorization", f"Bearer {api_key}")
+        response_request.add_header("Content-Type", "application/json")
+        response_request.add_header(
+            "HTTP-Referer", "https://chatbot-ia-portfolio-nine.vercel.app"
         )
+        response_request.add_header("X-Title", "ClaudeMind AI")
         with urlopen(response_request, timeout=30) as response:
             response_data = json.loads(response.read().decode("utf-8"))
         text = response_data["choices"][0]["message"]["content"]

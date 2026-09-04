@@ -8,6 +8,7 @@ Chatbot web com frontend estatico e API serverless em Python. A resposta e gerad
 2. Em **Settings > Environment Variables**, adicione:
 
    - `OPENROUTER_API_KEY`: sua chave gratuita do OpenRouter. Esta e a unica variavel necessaria.
+   - Se voce cadastrou a chave com o nome `OPENROUTER_KEY`, o endpoint tambem aceita esse nome.
 
 3. Faca o deploy. O arquivo `vercel.json` direciona `/api/chat` para a funcao Python.
 
