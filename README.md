@@ -8,7 +8,7 @@ Chatbot web com frontend estatico e API serverless em Python. A resposta e gerad
 2. Em **Settings > Environment Variables**, adicione:
 
    - `GROQ_API_KEY`: sua chave secreta da Groq.
-   - `GROQ_MODEL`: opcional. Padrao: `llama-3.1-8b-instant`.
+   - `GROQ_MODEL`: opcional. Padrao: `llama-3.1-8b-instant`. Use um modelo atualmente disponivel na sua conta Groq.
 
 3. Faca o deploy. O arquivo `vercel.json` direciona `/api/chat` para a funcao Python.
 

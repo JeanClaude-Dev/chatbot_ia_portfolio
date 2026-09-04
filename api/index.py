@@ -10,6 +10,7 @@ SYSTEM_PROMPT = (
     "Voce e um assistente de inteligencia artificial avancado que responde "
     "perguntas de forma clara e util."
 )
+GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.1-8b-instant")
 
 
 def get_client():
@@ -48,7 +49,7 @@ def chat(path=None):
     try:
         response = get_client().chat.completions.create(
             messages=[{"role": "system", "content": SYSTEM_PROMPT}] + clean_messages,
-            model="llama-3.3-70b-versatile",
+            model=GROQ_MODEL,
             temperature=0.7,
         )
         text = response.choices[0].message.content or "Nao consegui gerar uma resposta."
